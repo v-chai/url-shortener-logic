@@ -9,6 +9,10 @@ class ShortenedUrl < ApplicationRecord
         foreign_key: :user_id,
         class_name: 'User'
     
+    has_many :visitors,
+        primary_key: :id,
+        foreign_key: :visited_short_url,
+        class_name: 'Visit'
 
     def self.random_code
         code = nil
