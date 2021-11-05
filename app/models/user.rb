@@ -8,7 +8,7 @@ class User < ApplicationRecord
         class_name: 'ShortenedUrl'
 
     has_many :visited_urls,
-        primary_key: :id,
-        foreign_key: :visitor_id,
-        class_name: 'Visit'
+        -> { distinct },
+        through: :visits,
+        source: :visited_url
 end

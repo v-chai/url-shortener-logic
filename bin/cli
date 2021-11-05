@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+
+print 'Login with your email address:'
+user_email = gets.chomp
+user = User.find_by(email: user_email)
+
+puts 'Choose what you would like to do (enter 1 or 2):'
+puts '1. Create a shortened url'
+puts '2. Visit a shortened url'
+user_option = nil
+until user_option == 1 || user_option == 2
+    system("clear")
+    puts "Please enter 1 or 2 to select an option"
+    puts '1. Create a shortened url'
+    puts '2. Visit a shortened url'
+    user_option = gets.chomp.to_i
+end
+if user_option == 1
+    puts 'Type the URL you want to shorten:'
+    url = gets.chomp
+    new_short_url = ShortenedUrl.generate_short_url(user, url)
+    puts "Your shortened URL is: #{new_short_url.short_url}"
+    puts 'Goodbye!'
+else
+    puts 'Enter the short URL you would like to visit:'
+    url = gets.chomp
+    shortened_url = ShortenedUrl.find_by(short_url: url)
+    puts "Launching #{shortened_url.long_url}"
+    puts 'Goodbye!'
+    Launchy.open("#{shortened_url.long_url}")
+    Visit.record_visit!(user, shortened_url)
+end
